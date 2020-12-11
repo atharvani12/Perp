@@ -1,0 +1,98 @@
+Suppose we have a number A and we want to convert it to a number B and there is also a constrain that we can recover number A any time without using other variable.To achieve 
+this we chose a number N which is greater 
+than both numbers and add B*N int A.
+so A --> A+B*N
+
+To get number B out of (A+B*N) 
+we devide (A+B*N) by N (A+B*N)/N = B.
+
+To get number A out of (A+B*N) 
+we take modulo with N (A+B*N)%N = A.
+
+-> In short by taking modulo 
+we get old number back and taking divide 
+we new number.
+
+
+Step1 : Finding the mod 
+
+Eg arr1: 1 2 6 7  arr2: 3 5 8 9
+                              mod = max_element(arr1,arr2) +1;
+
+int mx = 0;
+     
+    // Find maximum element of both array
+    for (int i = 0; i < n; i++) {
+        mx = max(mx, a[i]);
+    }
+    for (int i = 0; i < m; i++) {
+        mx = max(mx, b[i]);
+    }
+ mx++;
+ 
+ 
+ Step 2:
+ 
+ int i = 0, j = 0, k = 0;
+    while (i < n && j < m && k < (n + m)) {
+         
+        // recover back original element to compare
+        int e1 = a[i] % mx;
+        int e2 = b[j] % mx;
+        if (e1 <= e2) {
+             
+            // update element by adding multiplication
+            // with new number
+            if (k < n)
+                a[k] += (e1 * mx);
+            else
+                b[k - n] += (e1 * mx);
+            i++;
+            k++;
+        }
+        else {
+             
+            // update element by adding multiplication
+            // with new number
+            if (k < n)
+                a[k] += (e2 * mx);
+            else
+                b[k - n] += (e2 * mx);
+            j++;
+            k++;
+        }
+    }
+    
+  Step 3: remaing elements in arr1, arr2
+  // process those elements which are left in array a
+    while (i < n) {
+        int el = a[i] % mx;
+        if (k < n)
+            a[k] += (el * mx);
+        else
+            b[k - n] += (el * mx);
+        i++;
+        k++;
+    }
+    
+   // process those elements which are left in array a
+    while (j < m) {
+        int el = b[j] % mx;
+        if (k < n)
+            b[k] += (el * mx);
+        else
+            b[k - n] += (el * mx);
+        j++;
+        k++;
+    }
+    
+   Step 4:
+     // finally update elements by dividing
+    // with maximum element
+    for (int i = 0; i < n; i++)
+        a[i] = a[i] / mx;
+ 
+    // finally update elements by dividing
+    // with maximum element
+    for (int i = 0; i < m; i++)
+        b[i] = b[i] / mx;
